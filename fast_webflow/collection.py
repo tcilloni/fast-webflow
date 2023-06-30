@@ -51,14 +51,28 @@ class Collection(UserDict):
 
 
     def publish_items(self, item_ids: list[str]) -> dict:
-        url = f"https://api.webflow.com/collections/{self.id}/items/publish"
-        data = self._request(requests.put, url, {"itemIds": item_ids})
+        max_items = self._max_items_per_request  # API rule
+        url = self._url + '/items/publish'
+        data = {}
 
+        # split IDs into lists of max 100 items
+        item_ids = [item_ids[i:i+max_items] for i in range(0, len(item_ids), max_items)]
+        payloads = [{"itemIds": ids} for ids in item_ids]
+
+        # send parallel requests
+        parallel_arguments = zip(repeat(url), payloads)
+        returns  = parallelize(lambda args: requests.put(*args), parallel_arguments)
+
+        # merge responses
+        for key in ['publishedItemIds', 'errors']:
+            data[key] = [item for resp in returns for item in resp[key]]
+        
         return data
     
 
     def delete_items(self, item_ids: list[str]) -> dict[str,list[any]]:
         max_items = self._max_items_per_request  # API rule
+        data = {}
 
         # split IDs into lists of max 100 items
         item_ids = [item_ids[i:i+max_items] for i in range(0, len(item_ids), max_items)]
@@ -67,17 +81,12 @@ class Collection(UserDict):
         # send parallel requests
         parallel_arguments = zip(repeat(self._items_url), payloads)
         returns  = parallelize(lambda args: requests.delete(*args), parallel_arguments)
-        merged_data = {}
-        
-        # merge the responses
-        if len(returns) > 0:
-            for key in returns[0]:
-                merged_data[key] = []
 
-                for d in returns:
-                    merged_data[key].extend(d.get(key, []))
+        # merge responses
+        for key in ['deletedItemIds', 'errors']:
+            data[key] = [item for resp in returns for item in resp[key]]
 
-        return merged_data
+        return data
     
 
     def get_all_items(self) -> list[dict]:
