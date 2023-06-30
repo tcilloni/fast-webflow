@@ -10,16 +10,16 @@ def list_collections(site_id: str) -> dict:
 
 
 class Collection:
-    colletion_id: str
-    url: str
-    headers: dict[str, str]
+    id: str
+    _url: str
+    _headers: dict[str, str]
     delay: int
     max_retries: int
 
     def __init__(self, collection_id: str, max_retries: int = 50, throttle_delay: int = 10):
-        self.collection_id = collection_id
+        self.id = collection_id
         self.url = f'https://api.webflow.com/collections/{collection_id}/items?live="true"'
-        self.headers = make_headers()
+        self._headers = make_headers()
         self.delay = throttle_delay
         self.max_retries = max_retries
     
@@ -28,7 +28,7 @@ class Collection:
         if url is None:
             url = self.url
         
-        return try_request(request_fn, url, self.headers, data, self.max_retries, self.delay)
+        return try_request(request_fn, url, self._headers, data, self.max_retries, self.delay)
     
 
     def post_item(self, fields: dict[str,any], draft: bool = False):
@@ -41,7 +41,7 @@ class Collection:
 
 
     def publish_items(self, item_ids: list[str]) -> dict:
-        url = f"https://api.webflow.com/collections/{self.collection_id}/items/publish"
+        url = f"https://api.webflow.com/collections/{self.id}/items/publish"
         data = self._request(requests.put, url, {"itemIds": item_ids})
 
         return data
