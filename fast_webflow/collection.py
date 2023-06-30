@@ -1,7 +1,7 @@
 import requests
 from collections import UserDict
 
-from .utils import string_to_dict, slugify, try_request
+from .utils import string_to_dict, slugify, try_request, parallelize
 from .config import make_headers
 
 
@@ -15,6 +15,7 @@ class Collection(UserDict):
     _url: str
     _items_url: str
     _headers: dict[str, str]
+    _max_items_per_request: int = 100
     delay: int
     max_retries: int
 
@@ -26,6 +27,7 @@ class Collection(UserDict):
         self.delay = throttle_delay
         self.max_retries = max_retries
         self.data = self.get_data()
+        print(f'Collection created with {self["total"]} items.')
     
 
     def get_data(self) -> dict:
@@ -56,41 +58,44 @@ class Collection(UserDict):
     
 
     def delete_items(self, item_ids: list[str]) -> dict[str,list[any]]:
-        max_items = 100  # API rule
-        data_dicts = []
-        merged_data = {}
+        max_items = self._max_items_per_request  # API rule
 
-        # expect similar responses
-        for i in range(0, len(item_ids), max_items):
-            payload = {"itemIds": item_ids[i : i + max_items]}
-            data = self._request(requests.delete, self._items_url, payload)
-            
-            data_dicts.append(data)
+        # split IDs into lists of max 100 items
+        item_ids = [item_ids[i:i+max_items] for i in range(0, len(item_ids), max_items)]
+        payloads = [{"itemIds": ids} for ids in item_ids]
+
+        # send parallel requests
+        parallel_arguments = zip(repeat(self._items_url), payloads)
+        returns  = parallelize(lambda args: requests.delete(*args), parallel_arguments)
+        merged_data = {}
         
         # merge the responses
-        if len(data_dicts) > 0:
-            for key in data_dicts[0].keys():
+        if len(returns) > 0:
+            for key in returns[0]:
                 merged_data[key] = []
 
-                for d in data_dicts:
+                for d in returns:
                     merged_data[key].extend(d.get(key, []))
 
         return merged_data
     
 
-    def get_items(self) -> list[dict]:
-        offset = 0
-        total = 1  # temp number to trigger one loop iteration
-        all_items = []
+    def get_all_items(self) -> list[dict]:
+        # update total number of items
+        self.data = self.get_data()
+        max_items = self._max_items_per_request  # API rule
+        total = self.data['total']
 
-        while offset < total:
-            url = self._items_url + f"&offset={offset}"
-            data = self._request(requests.get, url)
-            
-            total      = data['total']
-            offset    += data['count']
-            all_items += data['items']
+        # prepare one URL request for each offset in 0..total..limit
+        item_lists = parallelize(self.get_items, range(0, total, max_items))
+        all_items = [item for item_list in item_lists for item in item_list['items']]
         
         return all_items
+    
 
+    def get_items(self, offset: int = 0, limit: int = 100) -> list[dict]:
+        url = self._items_url + f"&offset={offset}&limit={limit}"
+        data = self._request(requests.get, url)
+        
+        return data
 
