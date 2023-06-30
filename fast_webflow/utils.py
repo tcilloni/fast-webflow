@@ -1,4 +1,5 @@
 import json
+import time
 import unicodedata
 from concurrent.futures import ThreadPoolExecutor
 
@@ -31,7 +32,7 @@ def save_dict(d: dict, fname: str) -> None:
         f.write(json.dumps(d, indent = 4))
 
 
-def try_request(request_fn: callable, url: str, headers: dict[str, str], max_retries: int, delay: float, data: dict) -> tuple[bool,dict]:
+def try_request(request_fn: callable, url: str, headers: dict[str, str], data: dict = None, max_retries: int = 50, delay: float = 10) -> dict:
     retry = 0
 
     while True:
