@@ -44,8 +44,8 @@ def try_request(request_fn: callable, url: str, headers: dict[str, str], max_ret
         
         # success, can return
         elif response.status_code == 200:
-            return True, string_to_dict(response.text)
+            return string_to_dict(response.text)
 
         # some other error; return it
         else:
-            return False, string_to_dict(response.text)
+            response.raise_for_status()

@@ -11,47 +11,48 @@ class Collection:
     delay: int
     max_retries: int
 
-    def __init__(self, auth_token: str, collection_id: str, max_retries: int = 50, throttle_delay: int = 10):
+    def __init__(self, collection_id: str, max_retries: int = 50, throttle_delay: int = 10):
         self.collection_id = collection_id
         self.url = f'https://api.webflow.com/collections/{collection_id}/items?live="true"'
-        self.headers = make_headers(auth_token)
+        self.headers = make_headers()
         self.delay = throttle_delay
         self.max_retries = max_retries
     
 
-    def try_request(self, request_fn: callable, url: str, data: dict = None) -> tuple[bool,dict]:
-        return try_request(request_fn, url, self.headers, self.max_retries, self.delay, data)
+    def request(self, request_fn: callable, url: str = None, data: dict = None) -> dict:
+        if url is None:
+            url = self.url
+        
+        return try_request(request_fn, url, self.headers, data, self.max_retries, self.delay)
     
 
     def post_item(self, fields: dict[str,any], draft: bool = False):
         payload = {'fields': {'_archived': False, '_draft': draft}}
         payload['fields'].update(fields)
 
-        success, data = self.try_request(requests.post, self.url, payload)
+        data = self.request(requests.post, self.url, payload)
         
-        return success, data
+        return data
 
 
-    def publish_items(self, item_ids: list[str]) -> tuple[bool, dict]:
+    def publish_items(self, item_ids: list[str]) -> dict:
         url = f"https://api.webflow.com/collections/{self.collection_id}/items/publish"
-        success, data = self.try_request(requests.put, url, {"itemIds": item_ids})
+        data = self.request(requests.put, url, {"itemIds": item_ids})
 
-        return success, data
+        return data
     
 
-    def delete_items(self, item_ids: list[str]) -> tuple[bool, dict[str,list[any]]]:
+    def delete_items(self, item_ids: list[str]) -> dict[str,list[any]]:
         max_items = 100  # API rule
-        success = True
         data_dicts = []
         merged_data = {}
 
         # expect similar responses
         for i in range(0, len(item_ids), max_items):
             payload = {"itemIds": item_ids[i : i + max_items]}
-            _success, _data = self.try_request(requests.delete, self.url, payload)
+            data = self.request(requests.delete, self.url, payload)
             
-            success = success and _success
-            data_dicts.append(_data)
+            data_dicts.append(data)
         
         # merge the responses
         if len(data_dicts) > 0:
@@ -61,20 +62,20 @@ class Collection:
                 for d in data_dicts:
                     merged_data[key].extend(d.get(key, []))
 
-        return success, merged_data
+        return merged_data
     
 
-    def get_items(self) -> tuple[bool, list[dict]]:
+    def get_items(self) -> list[dict]:
         offset = 0
         total = 1  # temp number to trigger one loop iteration
         all_items = []
 
         while offset < total:
             url = self.url + f"&offset={offset}"
-            success, data = self.try_request(requests.get, url)
+            data = self.request(requests.get, url)
             
             total      = data['total']
             offset    += data['count']
             all_items += data['items']
         
-        return True, all_items
+        return all_items
