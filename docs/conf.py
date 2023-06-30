@@ -2,6 +2,9 @@
 #
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
+import os
+import sys
+import shutil
 
 
 # -- Project information -----------------------------------------------------
@@ -31,10 +34,13 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 ###################################################################################################
 ###################################################################################################
+currdir = os.path.dirname(__file__)
+license_file_src = os.path.join(currdir, '..', 'LICENSE')
+license_file_dst = os.path.join(currdir, 'LICENSE')
+shutil.copy(license_file_src, license_file_dst)
+
 
 # https://github.com/coderefinery/documentation-example/blob/main/doc/conf.py
-import os
-import sys
 sys.path.insert(0, os.path.abspath('../fast_webflow'))
 
 master_doc = 'index'

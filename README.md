@@ -27,7 +27,7 @@ pip install webflow-api
 
 ## Getting Started
 
-1. Obtain an API key from WebFlow by following their [API Authentication Guide](https://developers.webflow.com/authentication).
+1. Obtain an API key from WebFlow by following their [API Access Token](https://developers.webflow.com/docs/access-token).
 2. Import the `WebFlow` class from the `webflow` module:
 
 ```python
