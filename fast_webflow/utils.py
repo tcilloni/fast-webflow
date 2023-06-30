@@ -29,3 +29,23 @@ def parallelize(function: callable, data: list[any], verbose: bool = True, threa
 def save_dict(d: dict, fname: str) -> None:
     with open(fname, 'w') as f:
         f.write(json.dumps(d, indent = 4))
+
+
+def try_request(request_fn: callable, url: str, headers: dict[str, str], max_retries: int, delay: float, data: dict) -> tuple[bool,dict]:
+    retry = 0
+
+    while True:
+        response = request_fn(url, json = data, headers = headers)
+
+        # hit API limit
+        if response.status_code == 429 and retry < max_retries: 
+            time.sleep(delay)
+            retry += 1
+        
+        # success, can return
+        elif response.status_code == 200:
+            return True, string_to_dict(response.text)
+
+        # some other error; return it
+        else:
+            return False, string_to_dict(response.text)

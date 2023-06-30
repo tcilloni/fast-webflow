@@ -1,8 +1,6 @@
 import requests
-import time
-from functools import partial
 
-from .utils import string_to_dict, slugify
+from .utils import string_to_dict, slugify, try_request
 from .config import make_headers
 
 
@@ -22,23 +20,7 @@ class Collection:
     
 
     def try_request(self, request_fn: callable, url: str, data: dict = None) -> tuple[bool,dict]:
-        retry = 0
-
-        while True:
-            response = request_fn(url, json = data, headers = self.headers)
-
-            # hit API limit
-            if response.status_code == 429 and retry < self.max_retries: 
-                time.sleep(self.delay)
-                retry += 1
-            
-            # success, can return
-            elif response.status_code == 200:
-                return True, string_to_dict(response.text)
-
-            # some other error; return it
-            else:
-                return False, string_to_dict(response.text)
+        return try_request(request_fn, url, self.headers, self.max_retries, self.delay, data)
     
 
     def post_item(self, fields: dict[str,any], draft: bool = False):
