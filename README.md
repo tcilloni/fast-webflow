@@ -1,7 +1,7 @@
 # fast-webflow
 a WebFlow CMS API Client in Python
 
-[![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](./LICENSE)
 <!--[![PyPI version](https://badge.fury.io/py/webflow-api.svg)](https://badge.fury.io/py/webflow-api)
 [![Python version](https://img.shields.io/pypi/pyversions/webflow-api.svg)](https://pypi.org/project/webflow-api)-->
 
@@ -50,10 +50,8 @@ for item in items:
     print(item)
 ```
 
-For more detailed usage examples and API documentation, please refer to the [API Reference](API_REFERENCE.md).
-
 ## Contributing
 Contributions to the Python WebFlow CMS API Client library are welcome! If you encounter any bugs, have suggestions, or would like to contribute new features, please feel free to open an issue or submit a pull request on GitHub.
 
 ## License
-This project is licensed under the GNU GPLv3 License. See the [LICENSE](LICENSE) file for more information.
+This project is licensed under the GNU GPLv3 License. See the [LICENSE](./LICENSE) file for more information.
