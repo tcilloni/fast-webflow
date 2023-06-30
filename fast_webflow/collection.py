@@ -1,4 +1,5 @@
 import requests
+from collections import UserDict
 
 from .utils import string_to_dict, slugify, try_request
 from .config import make_headers
@@ -9,24 +10,31 @@ def list_collections(site_id: str) -> dict:
     return data
 
 
-class Collection:
+class Collection(UserDict):
     id: str
     _url: str
+    _items_url: str
     _headers: dict[str, str]
     delay: int
     max_retries: int
 
     def __init__(self, collection_id: str, max_retries: int = 50, throttle_delay: int = 10):
         self.id = collection_id
-        self.url = f'https://api.webflow.com/collections/{collection_id}/items?live="true"'
+        self._url = f'https://api.webflow.com/collections/{collection_id}'
+        self._items_url = f'https://api.webflow.com/collections/{collection_id}/items?live="true"'
         self._headers = make_headers()
         self.delay = throttle_delay
         self.max_retries = max_retries
+        self.data = self.get_data()
+    
+
+    def get_data(self) -> dict:
+        return self._request(requests.get)
     
 
     def _request(self, request_fn: callable, url: str = None, data: dict = None) -> dict:
         if url is None:
-            url = self.url
+            url = self._items_url
         
         return try_request(request_fn, url, self._headers, data, self.max_retries, self.delay)
     
@@ -35,7 +43,7 @@ class Collection:
         payload = {'fields': {'_archived': False, '_draft': draft}}
         payload['fields'].update(fields)
 
-        data = self._request(requests.post, self.url, payload)
+        data = self._request(requests.post, self._items_url, payload)
         
         return data
 
@@ -55,7 +63,7 @@ class Collection:
         # expect similar responses
         for i in range(0, len(item_ids), max_items):
             payload = {"itemIds": item_ids[i : i + max_items]}
-            data = self._request(requests.delete, self.url, payload)
+            data = self._request(requests.delete, self._items_url, payload)
             
             data_dicts.append(data)
         
@@ -76,7 +84,7 @@ class Collection:
         all_items = []
 
         while offset < total:
-            url = self.url + f"&offset={offset}"
+            url = self._items_url + f"&offset={offset}"
             data = self._request(requests.get, url)
             
             total      = data['total']
@@ -84,3 +92,5 @@ class Collection:
             all_items += data['items']
         
         return all_items
+
+

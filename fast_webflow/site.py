@@ -1,6 +1,5 @@
 import requests
-import time
-from functools import partial
+from collections import UserDict
 
 from .utils import string_to_dict, slugify, try_request
 from .config import make_headers
@@ -11,7 +10,7 @@ def list_sites():
     return data
 
 
-class Site:
+class Site(UserDict):
     id: str
     _url: str
     _headers: dict[str, str]
@@ -24,6 +23,11 @@ class Site:
         self._headers = make_headers()
         self.delay = throttle_delay
         self.max_retries = max_retries
+        self.data = self.get_data()
+    
+
+    def get_data(self) -> dict:
+        return self._request(requests.get)
 
 
     def _request(self, request_fn: callable, url: str = None, data: dict = None) -> dict:
@@ -32,14 +36,17 @@ class Site:
         
         return try_request(request_fn, url, self._headers, data, self.max_retries, self.delay)
     
-    def get_info(self) -> dict:
-        return self._request(requests.get)
-    
+
     def publish(self, domains: list[str] = None) -> dict:
         if not domains:
             domains = [domain['name'] for domain in self.get_domains()]
 
         return self._request(requests.post, self._url + '/publish', {"domains": domains})
     
+
     def get_domains(self) -> dict:
         return self._request(requests.get, self._url + '/domains')
+
+
+    def get_collections(self) -> list[dict]:
+        return self._request(requests.get, self._url + '/collections')
