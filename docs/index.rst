@@ -10,6 +10,7 @@ Welcome to fast-webflow's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   modules
    readme_link.md
 
 

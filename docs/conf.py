@@ -38,13 +38,21 @@ currdir = os.path.dirname(__file__)
 license_file_src = os.path.join(currdir, '..', 'LICENSE')
 license_file_dst = os.path.join(currdir, 'LICENSE')
 shutil.copy(license_file_src, license_file_dst)
+autosummary_generate = True
+
 
 
 # https://github.com/coderefinery/documentation-example/blob/main/doc/conf.py
-sys.path.insert(0, os.path.abspath('../fast_webflow'))
+src_folder = os.path.join(currdir, '..')
+sys.path.insert(0, os.path.abspath(src_folder))
 
 master_doc = 'index'
-extensions = ['sphinx.ext.autodoc', 'myst_parser']
+extensions = [
+    'myst_parser',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.napoleon'
+]
 pygments_style = 'sphinx'
 html_theme = 'sphinx_rtd_theme'
 html_static_path = []
