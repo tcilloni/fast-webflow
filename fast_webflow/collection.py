@@ -5,11 +5,6 @@ from .utils import string_to_dict, slugify, try_request, parallelize
 from .config import make_headers
 
 
-def list_collections(site_id: str) -> dict:
-    data = try_request(requests.get, f'https://api.webflow.com/sites/{site_id}/collections', make_headers())
-    return data
-
-
 class Collection(UserDict):
     id: str
     _url: str
@@ -27,7 +22,6 @@ class Collection(UserDict):
         self.delay = throttle_delay
         self.max_retries = max_retries
         self.data = self.get_data()
-        print(f'Collection created with {self["total"]} items.')
     
 
     def get_data(self) -> dict:
