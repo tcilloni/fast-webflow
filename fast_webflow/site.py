@@ -26,20 +26,20 @@ class Site:
         self.max_retries = max_retries
 
 
-    def request(self, request_fn: callable, url: str = None, data: dict = None) -> dict:
+    def _request(self, request_fn: callable, url: str = None, data: dict = None) -> dict:
         if url is None:
             url = self.url
         
         return try_request(request_fn, url, self.headers, data, self.max_retries, self.delay)
     
     def get_info(self) -> dict:
-        return self.request(requests.get)
+        return self._request(requests.get)
     
     def publish(self, domains: list[str] = None) -> dict:
         if not domains:
             domains = [domain['name'] for domain in self.get_domains()]
 
-        return self.request(requests.post, self.url + '/publish', {"domains": domains})
+        return self._request(requests.post, self.url + '/publish', {"domains": domains})
     
     def get_domains(self) -> dict:
-        return self.request(requests.get, self.url + '/domains')
+        return self._request(requests.get, self.url + '/domains')

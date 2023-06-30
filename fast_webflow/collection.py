@@ -4,6 +4,11 @@ from .utils import string_to_dict, slugify, try_request
 from .config import make_headers
 
 
+def list_collections(site_id: str) -> dict:
+    data = try_request(requests.get, f'https://api.webflow.com/sites/{site_id}/collections', make_headers())
+    return data
+
+
 class Collection:
     colletion_id: str
     url: str
@@ -19,7 +24,7 @@ class Collection:
         self.max_retries = max_retries
     
 
-    def request(self, request_fn: callable, url: str = None, data: dict = None) -> dict:
+    def _request(self, request_fn: callable, url: str = None, data: dict = None) -> dict:
         if url is None:
             url = self.url
         
@@ -30,14 +35,14 @@ class Collection:
         payload = {'fields': {'_archived': False, '_draft': draft}}
         payload['fields'].update(fields)
 
-        data = self.request(requests.post, self.url, payload)
+        data = self._request(requests.post, self.url, payload)
         
         return data
 
 
     def publish_items(self, item_ids: list[str]) -> dict:
         url = f"https://api.webflow.com/collections/{self.collection_id}/items/publish"
-        data = self.request(requests.put, url, {"itemIds": item_ids})
+        data = self._request(requests.put, url, {"itemIds": item_ids})
 
         return data
     
@@ -50,7 +55,7 @@ class Collection:
         # expect similar responses
         for i in range(0, len(item_ids), max_items):
             payload = {"itemIds": item_ids[i : i + max_items]}
-            data = self.request(requests.delete, self.url, payload)
+            data = self._request(requests.delete, self.url, payload)
             
             data_dicts.append(data)
         
@@ -72,7 +77,7 @@ class Collection:
 
         while offset < total:
             url = self.url + f"&offset={offset}"
-            data = self.request(requests.get, url)
+            data = self._request(requests.get, url)
             
             total      = data['total']
             offset    += data['count']
