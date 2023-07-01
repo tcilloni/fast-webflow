@@ -42,6 +42,20 @@ class Collection(UserDict):
         data = self._request(requests.post, self._items_url, payload)
         
         return data
+    
+
+    def post_items(self, fields_list: list[dict[str,any]], draft: bool = False):
+        payloads = []
+
+        for item_fields in fields_list:
+            payload = {'fields': {'_archived': False, '_draft': draft}}
+            payload['fields'].update(item_fields)
+            payloads.append(payload)
+
+        parallel_arguments = zip(repeat(self._items_url), payloads)
+        data = parallelize(lambda args: requests.post(*args), parallel_arguments)
+        
+        return data
 
 
     def publish_items(self, item_ids: list[str]) -> dict:
