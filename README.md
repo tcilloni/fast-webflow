@@ -34,10 +34,8 @@ pip install fast-webflow
 ```
 
 ## Getting Started
-
 1. Obtain an API key from WebFlow by following their [API Access Token](https://developers.webflow.com/docs/access-token).
 2. Import the `cms` module from the `fast-webflow` package automatically to interact with the WebFlow CMS API; then authenticate:
-
 ```python
 import cms
 api_key = 'YOUR_API_KEY'
@@ -45,7 +43,6 @@ cms.authenticate(api_key)
 ```
 
 3. Start interacting with the WebFlow API using the provided methods. For example, to fetch all items from a collection:
-
 ```python
 from cms import Collection
 
@@ -56,6 +53,89 @@ items = collection.get_all_items()
 for item in items:
     print(item["slug"])
 ```
+
+## Examples
+If you are quickly searching for a particular code snippet, I hope you can find it here. These all
+assume that you *are already authenticated* (if not, see [the quickstart](#getting-started)).
+
+### Create CMS Elements
+Elements from the CMS are handled via classes, with relevant methods for each. Classes also behave like dictionaries, holding by default some basic information (fetched from the CMS at creation time).
+```python
+from cms import Site, Collection, Item
+
+# connect to the Sites part of the API
+site_id = 'YOUR_SITE_ID'
+site = Site(site_id)
+
+# connect to the Collections part of the API
+collection_id = 'YOUR_COLLECTION_ID'
+collection = Collection(collection_id)
+
+# connect to the Items part of the API
+item_id = 'YOUR_ITEM_ID'
+item = Item(item_id)
+```
+
+### Fetch Data
+```python
+from cms import Site, Collection, Item
+
+# get list of available sites
+sites = cms.list_sites()
+site_id = sites[0]['_id']
+
+# connect to that site's CMS and get some data
+site = Site(site_id)
+assert site_id == site.id == site['_id']
+
+collections   = site.get_collections()
+domains       = site.get_domains()
+site_details  = site.get_data()
+site_name     = site['name']
+```
+```python
+# connect to a collection in the CMS and get some data
+collection_id = 'YOUR_CONNECTION_ID'
+collection = Collection(collection_id)
+items = collection.get_all_items()
+```
+```python
+# connect to an item in the CMS and get some data
+item_id = 'YOUR_ITEM_ID'
+item = Item(item_id)
+item_data = item.get_data()
+```
+
+### Publish Website
+```python
+from cms import Site
+
+# connect to that site's CMS and publish it
+site_id = 'YOUR_SITE_ID'
+site = Site(site_id)
+site.publish()
+
+# you may specify custom domains too
+site.publish(['www.first.domain.com', 'www.second.domain.com'])
+```
+
+### Upload Data
+```python
+from cms import Site, Collection, Item
+
+new_items = [
+  {
+    'name': 'first item,
+    'slug': 'item1
+  },
+  {
+    'name': 'second item,
+    'slug': 'item2
+  },
+]
+added_items = collection.post_items(new_items)
+```
+
 
 ## Contributing
 Contributions to the fast-WebFlow Python Client library are welcome! If you encounter any bugs, have suggestions, or would like to contribute new features, please feel free to open an issue or submit a pull request on GitHub. You can also contact me directly!
