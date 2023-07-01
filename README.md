@@ -17,7 +17,7 @@ Check out an example website built with the help of *fast-webflow*: [liguriasegr
 - [ ] Add *membership* functionality
 - [ ] Add tests
 - [ ] Finish documentation
-- [ ] Publish to PyPi
+- [x] Publish to PyPi
 
 
 ## Features
