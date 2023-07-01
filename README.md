@@ -7,9 +7,10 @@ a WebFlow CMS API Client in Python
 
 This Python library provides an **intuitive** and **fast** interface over WebFlow's API. It simplifies the process of integrating your Python applications with the WebFlow content management system (CMS), allowing you to create, read, update, and delete items within your WebFlow collections.
 
-Check out an example website built with the help of *fast-webflow*: [liguriasegreta.com](https://www.liguriasegreta.com)
+> Check out an example website built with the help of `fast-webflow`: [**liguriasegreta.com**](https://www.liguriasegreta.com)
 
-**DISCLAIMER**: This is an unofficial abstraction over WebFlow's API and I am not associated with the WebFlow team.
+### DISCLAIMER
+This is an **unofficial** abstraction over WebFlow's API and I am not associated with the WebFlow team.
 
 
 ## Roadmap
@@ -21,48 +22,46 @@ Check out an example website built with the help of *fast-webflow*: [liguriasegr
 
 
 ## Features
-- Authenticate with the WebFlow API using your API key
-- Fetch collection data and items from WebFlow
-- Create, update, and delete items within WebFlow collections
-- Search for items within collections using filter parameters
-- Handle pagination for large datasets
-- Retrieve collection schema and field information
-- Upload files to WebFlow
+- **Authenticate** with the WebFlow API using your API key
+- **Fetch**, **Create**, **Update**, and **Delete** Items and files from WebFlow Collections
+- Handle **pagination** for large Collections
+- Hidden parallelization for **faster operations** (with implicit error handling)
 
 ## Installation
-You can install the Python WebFlow CMS API Client library using pip:
-
+You can install the package using pip:
 ```bash
-pip install webflow-api
+pip install fast-webflow
 ```
 
 ## Getting Started
 
 1. Obtain an API key from WebFlow by following their [API Access Token](https://developers.webflow.com/docs/access-token).
-2. Import the `WebFlow` class from the `webflow` module:
+2. Import the `cms` module from the `fast-webflow` package automatically to interact with the WebFlow CMS API; then authenticate:
 
 ```python
-from webflow import WebFlow
-```
-
-3. Initialize the `WebFlow` client with your API key:
-
-```python
+import cms
 api_key = 'YOUR_API_KEY'
-client = WebFlow(api_key)
+cms.authenticate(api_key)
 ```
 
-4. Start interacting with the WebFlow API using the provided methods. For example, to fetch all items from a collection:
+3. Start interacting with the WebFlow API using the provided methods. For example, to fetch all items from a collection:
 
 ```python
+from cms import Collection
+
 collection_id = 'COLLECTION_ID'
-items = client.get_collection_items(collection_id)
+collection = Collection(collection_id)
+items = collection.get_all_items()
+
 for item in items:
-    print(item)
+    print(item["slug"])
 ```
 
 ## Contributing
-Contributions to the Python WebFlow CMS API Client library are welcome! If you encounter any bugs, have suggestions, or would like to contribute new features, please feel free to open an issue or submit a pull request on GitHub.
+Contributions to the fast-WebFlow Python Client library are welcome! If you encounter any bugs, have suggestions, or would like to contribute new features, please feel free to open an issue or submit a pull request on GitHub. You can also contact me directly!
+- [Open a new issue](https://github.com/tcilloni/fast-webflow/issues/new)
+- [Pull Requests](https://github.com/tcilloni/fast-webflow/pulls)
+- [Email me](mailto:tcilloni@outlook.com)
 
 ## License
 This project is licensed under the GNU GPLv3 License. See the [LICENSE](./LICENSE) file for more information.
