@@ -9,8 +9,7 @@ This Python library provides an **intuitive** and **fast** interface over WebFlo
 
 > Check out an example website built with the help of `fast-webflow`: [**liguriasegreta.com**](https://www.liguriasegreta.com)
 
-### DISCLAIMER
-This is an **unofficial** abstraction over WebFlow's API and I am not associated with the WebFlow team.
+**DISCLAIMER**  : This is an **unofficial** abstraction over WebFlow's API and I am not associated with the WebFlow team.
 
 
 ## Roadmap

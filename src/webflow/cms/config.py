@@ -5,6 +5,12 @@ _auth_token = None
 
 
 def make_headers() -> dict[str, str]:
+    '''
+    Generate headers with the API TOKEN to include in all requests.
+
+    Returns:
+        dict[str, str]: complete headers dict.
+    '''
     assert _auth_token, 'You must first set the `auth_token` variable.'
 
     headers = {
@@ -17,6 +23,18 @@ def make_headers() -> dict[str, str]:
 
 
 def authenticate(auth_token: str) -> None:
+    '''
+    Authenticate to the WebFlow API using a valid API TOKEN.
+    Visit the `Site API TOKEN <https://developers.webflow.com/docs/access-token>`__ page for more info.
+    Upon successful login, the method prints to the standard output a welcome message with the name
+    of the associated user.
+
+    Args:
+        auth_token (str): your API TOKEN.
+
+    Raises:
+        Exception: if the token is not valid.
+    '''
     global _auth_token
 
     # set the new token
