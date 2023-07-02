@@ -39,11 +39,12 @@ license_file_src = os.path.join(currdir, '..', 'LICENSE')
 license_file_dst = os.path.join(currdir, 'LICENSE')
 shutil.copy(license_file_src, license_file_dst)
 autosummary_generate = True
+myst_heading_anchors = 3 # generate markdown relative links from H1 to H3
 
 
 
 # https://github.com/coderefinery/documentation-example/blob/main/doc/conf.py
-src_folder = os.path.join(currdir, '..')
+src_folder = os.path.join(currdir, '../src/')
 sys.path.insert(0, os.path.abspath(src_folder))
 
 master_doc = 'index'

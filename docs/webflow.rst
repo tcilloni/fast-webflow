@@ -1,5 +1,5 @@
-src package
-===========
+webflow package
+===============
 
 Subpackages
 -----------
@@ -7,12 +7,12 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   src.cms
+   webflow.cms
 
 Module contents
 ---------------
 
-.. automodule:: src
+.. automodule:: webflow
    :members:
    :undoc-members:
    :show-inheritance:
