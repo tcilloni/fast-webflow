@@ -53,7 +53,7 @@ class Collection(UserDict):
         Returns:
             dict[str, any]: information about this collection (name, slug, etc.).
         '''
-        self.data = self._request(requests.get)
+        self.data = self._request(requests.get, self._url)
         return self.data
     
 
@@ -164,8 +164,8 @@ class Collection(UserDict):
         payloads = [{"itemIds": ids} for ids in item_ids]
 
         # send parallel requests
-        parallel_arguments = zip(repeat(self._items_url), payloads)
-        returns  = parallelize(lambda args: requests.delete(*args), parallel_arguments)
+        delete_fn = lambda data : self._request(requests.delete, self._items_url, data)
+        returns  = parallelize(delete_fn, payloads)
 
         # merge responses
         for key in ['deletedItemIds', 'errors']:
@@ -205,9 +205,9 @@ class Collection(UserDict):
             list[dict]: list of each item's data.
         '''
         # update total number of items
-        self.data = self.get_data()
         max_items = self._max_items_per_request  # API rule
-        total = self.data['total']
+        initial_data = self._request(requests.get, self._items_url)
+        total = initial_data['total']
 
         # prepare one URL request for each offset in 0..total..limit
         item_lists = parallelize(self.get_items, range(0, total, max_items))

@@ -39,7 +39,7 @@ class Item(UserDict):
         self.delay = throttle_delay
         self.max_retries = max_retries
 
-        self._url = f'https://api.webflow.com/collections/{collection_id}/items/{item_id}?live=true'
+        self._url = f'https://api.webflow.com/collections/{collection_id}/items/{item_id}'
         self._headers = make_headers()
         self.data = self.get_data()
     
@@ -53,7 +53,7 @@ class Item(UserDict):
         Returns:
             dict[str, any]: information about this item (name, slug, etc.).
         '''
-        self.data = self._request(requests.get)
+        self.data = self._request(requests.get)['items'][0]
         return self.data
     
 
