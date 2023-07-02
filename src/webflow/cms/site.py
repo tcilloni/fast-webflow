@@ -39,10 +39,10 @@ class Site(UserDict):
         self.id = site_id
         self.delay = throttle_delay
         self.max_retries = max_retries
-        self.data = self.get_data()
 
         self._url = f'https://api.webflow.com/sites/{site_id}'
         self._headers = make_headers()
+        self.data = self.get_data()
     
 
     def get_data(self) -> dict[str, any]:

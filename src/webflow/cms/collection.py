@@ -36,12 +36,12 @@ class Collection(UserDict):
         self.id = collection_id
         self.delay = throttle_delay
         self.max_retries = max_retries
-        self.data = self.get_data()
 
         self._url = f'https://api.webflow.com/collections/{collection_id}'
         self._items_url = f'https://api.webflow.com/collections/{collection_id}/items?live="true"'
         self._headers = make_headers()
         self._max_items_per_request = 100
+        self.data = self.get_data()
     
 
     def get_data(self) -> dict[str, any]:
