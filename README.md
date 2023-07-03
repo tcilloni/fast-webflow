@@ -2,8 +2,8 @@
 a WebFlow CMS API Client in Python
 
 [![License](https://img.shields.io/badge/license-GPLv3-blue.svg)](./LICENSE)
-<!--[![PyPI version](https://badge.fury.io/py/webflow-api.svg)](https://badge.fury.io/py/webflow-api)
-[![Python version](https://img.shields.io/pypi/pyversions/webflow-api.svg)](https://pypi.org/project/webflow-api)-->
+[![PyPI version](https://badge.fury.io/py/fast-webflow.svg)](https://badge.fury.io/py/fast-webflow)
+[![PyPI stats](https://img.shields.io/pypi/dm/fast-webflow.svg)](https://img.shields.io/pypi/dm/fast-webflow.svg)
 
 This Python library provides an **intuitive** and **fast** interface over WebFlow's API. It simplifies the process of integrating your Python applications with the WebFlow content management system (CMS), allowing you to create, read, update, and delete items within your WebFlow collections.
 
@@ -16,7 +16,7 @@ This Python library provides an **intuitive** and **fast** interface over WebFlo
 - [ ] Add *e-commerce* functionality
 - [ ] Add *membership* functionality
 - [ ] Add tests
-- [ ] Finish documentation
+- [x] Finish documentation
 - [x] Publish to PyPi
 
 
