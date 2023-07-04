@@ -1,13 +1,9 @@
 import pytest
-import webflow
-from webflow.cms import Collection
-
-from webflow import cms
-from webflow.cms import Site, Collection, Item, slugify
+from webflow.cms import list_sites, Site
 
 
 def test_fetch_sites():
-    sites = cms.list_sites()
+    sites = list_sites()
     assert type(sites) == list, f'List sites did not return a valid list of sites, but a "{type(sites)}".'
     assert len(sites) > 0, f'Need at least one site to test with.'
 
