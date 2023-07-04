@@ -60,6 +60,10 @@ def parallelize(function: callable, data: list[any], threads: int = 50, await_co
     return results
 
 
+def parallelize_multiargs(function: callable, data: list[any], threads: int = 50, await_completion: bool = True) -> list[any]:
+    return parallelize(lambda args: function(*args), data, threads, await_completion)
+
+
 def try_request(request_fn: callable, url: str, headers: dict[str, str], data: dict = None, 
         max_retries: int = 50, delay: float = 10) -> dict:
     '''
