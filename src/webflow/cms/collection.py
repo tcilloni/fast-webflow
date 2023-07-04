@@ -3,11 +3,12 @@ from collections import UserDict
 from functools import partial
 from itertools import repeat
 
-from .utils import string_to_dict, slugify, try_request, parallelize
-from .config import make_headers
+from ..utils import try_request, parallelize, parallelize_multiargs
+from ..config import make_headers
+from ..entity import Entity
 
 
-class Collection(UserDict):
+class Collection(Entity):
     """
     A Collection object connects with WebFlow's CMS API.
 
@@ -22,7 +23,7 @@ class Collection(UserDict):
         data (dict): dictionary representation of the collection's data.
     """
 
-    def __init__(self, collection_id: str, max_retries: int = 50, throttle_delay: float = 10):
+    def __init__(self, id: str, *args, **kwargs):
         """
         Create a new Collection object.
 
@@ -33,13 +34,9 @@ class Collection(UserDict):
             max_retries (int, optional): number of times failed requests are retried (including 
                 after hitting rate limits). Defaults to 50.
         """
-        self.id = collection_id
-        self.delay = throttle_delay
-        self.max_retries = max_retries
-
-        self._url = f'https://api.webflow.com/collections/{collection_id}'
-        self._items_url = f'https://api.webflow.com/collections/{collection_id}/items?live="true"'
-        self._headers = make_headers()
+        super(Collection, self).__init__(id, *args, **kwargs)
+        self._url = f'https://api.webflow.com/collections/{id}'
+        self._items_url = f'https://api.webflow.com/collections/{id}/items'
         self._max_items_per_request = 100
         self.data = self.get_data()
     
@@ -53,27 +50,8 @@ class Collection(UserDict):
         Returns:
             dict[str, any]: information about this collection (name, slug, etc.).
         '''
-        self.data = self._request(requests.get, self._url)
-        return self.data
-    
+        return self._get()
 
-    def _request(self, request_fn: callable, url: str = None, data: dict = None) -> dict[str, any]:
-        '''
-        Default request method for the collection object.
-
-        Args:
-            request_fn (callable): function to call (one of requests.get/put/post/delete).
-            url (str, optional): specify to use a different URL than the default one. Defaults to `_items_url`.
-            data (dict, optional): optional JSON data to ship with the request. Defaults to None.
-
-        Returns:
-            dict[str, any]: whatever the response is, if valid, and always a dictionary.
-        '''
-        if url is None:
-            url = self._items_url
-        
-        return try_request(request_fn, url, self._headers, data, self.max_retries, self.delay)
-    
 
     def post_item(self, fields: dict[str,any], draft: bool = False) -> dict[str, any]:
         '''
@@ -88,10 +66,8 @@ class Collection(UserDict):
         '''
         payload = {'fields': {'_archived': False, '_draft': draft}}
         payload['fields'].update(fields)
-
-        data = self._request(requests.post, self._items_url, payload)
         
-        return data
+        return self._post(self._items_url, payload)
     
 
     def post_items(self, fields_list: list[dict[str,any]], draft: bool = False) -> list[dict[str, any]]:
@@ -134,8 +110,8 @@ class Collection(UserDict):
         payloads = [{"itemIds": ids} for ids in item_ids]
 
         # send parallel requests
-        parallel_arguments = zip(repeat(url), payloads)
-        returns  = parallelize(lambda args: requests.put(*args), parallel_arguments)
+        urls_and_data = zip(repeat(url), payloads)
+        returns  = parallelize_multiargs(self._put, urls_and_data)
 
         # merge responses
         for key in ['publishedItemIds', 'errors']:
@@ -164,8 +140,8 @@ class Collection(UserDict):
         payloads = [{"itemIds": ids} for ids in item_ids]
 
         # send parallel requests
-        delete_fn = lambda data : self._request(requests.delete, self._items_url, data)
-        returns  = parallelize(delete_fn, payloads)
+        urls_and_data = zip(repeat(self._items_url), payloads)
+        returns = parallelize_multiargs(self._delete, urls_and_data)
 
         # merge responses
         for key in ['deletedItemIds', 'errors']:
@@ -188,9 +164,8 @@ class Collection(UserDict):
             dict[str, any]: group of items (index with the key `items` to get the actual data).
         '''
         url = self._items_url + f"&offset={offset}&limit={limit}"
-        data = self._request(requests.get, url)
-        
-        return data
+
+        return self._get(url)
     
 
     def get_all_items(self) -> list[dict]:
@@ -206,7 +181,7 @@ class Collection(UserDict):
         '''
         # update total number of items
         max_items = self._max_items_per_request  # API rule
-        initial_data = self._request(requests.get, self._items_url)
+        initial_data = self._get(self._items_url)
         total = initial_data['total']
 
         # prepare one URL request for each offset in 0..total..limit

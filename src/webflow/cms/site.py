@@ -1,16 +1,15 @@
 import requests
 from collections import UserDict
 
-from .utils import string_to_dict, slugify, try_request
-from .config import make_headers
+from ..entity import Entity
+from ..utils import try_request
 
 
 def list_sites():
-    data = try_request(requests.get, 'https://api.webflow.com/sites', make_headers())
-    return data
+    return Entity(None)._get('https://api.webflow.com/sites')
 
 
-class Site(UserDict):
+class Site(Entity):
     """
     A Site object connects with WebFlow's General API.
 
@@ -25,7 +24,7 @@ class Site(UserDict):
         data (dict): dictionary representation of the site's data.
     """
 
-    def __init__(self, site_id: str, max_retries: int = 50, throttle_delay: int = 10):
+    def __init__(self, id: str, *args, **kwargs):
         '''
         Create a new Site object.
 
@@ -36,12 +35,8 @@ class Site(UserDict):
             max_retries (int, optional): number of times failed requests are retried (including 
                 after hitting rate limits). Defaults to 50.
         '''
-        self.id = site_id
-        self.delay = throttle_delay
-        self.max_retries = max_retries
-
-        self._url = f'https://api.webflow.com/sites/{site_id}'
-        self._headers = make_headers()
+        super(Site, self).__init__(id, *args, **kwargs)
+        self._url = f'https://api.webflow.com/sites/{id}'
         self.data = self.get_data()
     
 
@@ -54,26 +49,8 @@ class Site(UserDict):
         Returns:
             dict[str, any]: information about this site (name, domains, etc.).
         '''
-        return self._request(requests.get)
+        return self._get()
 
-
-    def _request(self, request_fn: callable, url: str = None, data: dict = None) -> dict[str, any]:
-        '''
-        Default request method for the site object.
-
-        Args:
-            request_fn (callable): function to call (one of requests.get/put/post/delete).
-            url (str, optional): specify to use a different URL than the default one. Defaults to `_url`.
-            data (dict, optional): optional JSON data to ship with the request. Defaults to None.
-
-        Returns:
-            dict[str, any]: whatever the response is, if valid, and always a dictionary.
-        '''
-        if url is None:
-            url = self._url
-        
-        return try_request(request_fn, url, self._headers, data, self.max_retries, self.delay)
-    
 
     def publish(self, domains: list[str] = None) -> dict[str, bool]:
         '''
@@ -86,11 +63,8 @@ class Site(UserDict):
         Returns:
             dict[str, bool]: `{'queued': True}` if successful, `{'queued': False}` otherwise
         '''
-        # `queued`
-        if not domains:
-            domains = [domain['name'] for domain in self.get_domains()]
-
-        return self._request(requests.post, self._url + '/publish', {"domains": domains})
+        domains = domains or [domain['name'] for domain in self.get_domains()]
+        return self._post(self._url + '/publish', {"domains": domains})
     
 
     def get_domains(self) -> list[dict[str, str]]:
@@ -100,7 +74,7 @@ class Site(UserDict):
         Returns:
             list[dict[str, str]]: list of `{'id': id, 'name': name}` dictionaries.
         '''
-        return self._request(requests.get, self._url + '/domains')
+        return self._get(self._url + '/domains')
 
 
     def get_collections(self) -> list[dict[str, any]]:
@@ -110,4 +84,4 @@ class Site(UserDict):
         Returns:
             list[dict[str, any]]: list of collections with some basic data.
         '''
-        return self._request(requests.get, self._url + '/collections')
+        return self._get(self._url + '/collections')

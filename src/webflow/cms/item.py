@@ -1,11 +1,12 @@
 import requests
 from collections import UserDict
 
-from .utils import string_to_dict, slugify, try_request, parallelize
-from .config import make_headers
+from ..utils import try_request
+from ..config import make_headers
+from ..entity import Entity
 
 
-class Item(UserDict):
+class Item(Entity):
     """
     An Item object connects with WebFlow's CMS API.
 
@@ -22,7 +23,7 @@ class Item(UserDict):
         data (dict): dictionary representation of the item's data.
     """
 
-    def __init__(self, collection_id: str, item_id: str, max_retries: int = 50, throttle_delay: int = 10):
+    def __init__(self, collection_id: str, id: str, *args, **kwargs):
         '''
         Create a new Item object.
         You must supply the collection ID as well as the item ID in order to uniquely find the item.
@@ -35,12 +36,8 @@ class Item(UserDict):
             max_retries (int, optional): number of times failed requests are retried (including 
                 after hitting rate limits). Defaults to 50.
         '''
-        self.id = item_id
-        self.delay = throttle_delay
-        self.max_retries = max_retries
-
-        self._url = f'https://api.webflow.com/collections/{collection_id}/items/{item_id}'
-        self._headers = make_headers()
+        super(Site, self).__init__(id, *args, **kwargs)
+        self._url = f'https://api.webflow.com/collections/{collection_id}/items/{id}'
         self.data = self.get_data()
     
 
@@ -53,29 +50,11 @@ class Item(UserDict):
         Returns:
             dict[str, any]: information about this item (name, slug, etc.).
         '''
-        self.data = self._request(requests.get)['items'][0]
+        self.data = self._get()['items'][0]
         return self.data
-    
 
-    def _request(self, request_fn: callable, url: str = None, data: dict = None) -> dict[str, any]:
-        '''
-        Default request method for the item object.
 
-        Args:
-            request_fn (callable): function to call (one of requests.get/put/post/delete).
-            url (str, optional): specify to use a different URL than the default one. Defaults to `_url`.
-            data (dict, optional): optional JSON data to ship with the request. Defaults to None.
-
-        Returns:
-            dict[str, any]: whatever the response is, if valid, and always a dictionary.
-        '''
-        if url is None:
-            url = self._url
-        
-        return try_request(request_fn, url, self._headers, data, self.max_retries, self.delay)
-    
-
-    def update_data(self, fields: dict[str,any], draft: bool = False) -> dict[str, str]:
+    def update(self, fields: dict[str,any], draft: bool = False) -> dict[str, str]:
         '''
         Update the item's data completely.
         This method will also update this object's data.
@@ -90,7 +69,7 @@ class Item(UserDict):
         payload = {'fields': {'_archived': False, '_draft': draft}}
         payload['fields'].update(fields)
 
-        data = self._request(requests.put, self._url, payload)
+        data = self._put(payload = payload)
         self.get_data() # self-update
         
         return data
@@ -111,7 +90,7 @@ class Item(UserDict):
         payload = {'fields': {'_archived': False, '_draft': draft}}
         payload['fields'].update(fields)
 
-        data = self._request(requests.patch, self._url, payload)
+        data = self._patch(payload = payload)
         self.get_data() # self-update
         
         return data
@@ -125,7 +104,7 @@ class Item(UserDict):
         Returns:
             dict: dictionary that should be `{'deleted': 1}` if deletion was successful.
         '''
-        data = self._request(requests.delete, self._url)
+        data = self._delete()
 
         # destroy itself
         self._request = lambda: (_ for _ in ()).throw(Exception('Item does not exist anymore'))
