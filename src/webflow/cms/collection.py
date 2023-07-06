@@ -163,7 +163,7 @@ class Collection(Entity):
         Returns:
             dict[str, any]: group of items (index with the key `items` to get the actual data).
         '''
-        url = self._items_url + f"&offset={offset}&limit={limit}"
+        url = self._items_url + f"?offset={offset}&limit={limit}"
 
         return self._get(url)
     
