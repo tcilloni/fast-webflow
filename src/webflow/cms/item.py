@@ -36,7 +36,7 @@ class Item(Entity):
             max_retries (int, optional): number of times failed requests are retried (including 
                 after hitting rate limits). Defaults to 50.
         '''
-        super(Site, self).__init__(id, *args, **kwargs)
+        super(Item, self).__init__(id, *args, **kwargs)
         self._url = f'https://api.webflow.com/collections/{collection_id}/items/{id}'
         self.data = self.get_data()
     
