@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to fast-webflow &mdash; fast-webflow 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="webflow.cms package" href="webflow.cms.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            fast-webflow
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules.html">src</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Welcome to fast-webflow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#roadmap">Roadmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-cms-elements">Create CMS Elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fetch-data">Fetch Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#publish-website">Publish Website</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#upload-data">Upload Data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">fast-webflow</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome to fast-webflow</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/readme_link.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-fast-webflow">
+<h1>Welcome to fast-webflow<a class="headerlink" href="#welcome-to-fast-webflow" title="Permalink to this heading"></a></h1>
+<p>a WebFlow CMS API Client in Python</p>
+<p><a class="reference download internal" download="" href="_downloads/9879d6db96fd29134fc802214163b95a/LICENSE"><span class="xref download myst"><img alt="License" src="https://img.shields.io/badge/license-GPLv3-blue.svg" /></span></a>
+<a class="reference external" href="https://badge.fury.io/py/fast-webflow"><img alt="PyPI version" src="https://badge.fury.io/py/fast-webflow.svg" /></a>
+<a class="reference external" href="https://img.shields.io/pypi/dm/fast-webflow.svg"><img alt="PyPI stats" src="https://img.shields.io/pypi/dm/fast-webflow.svg" /></a></p>
+<p>This Python library provides an <strong>intuitive</strong> and <strong>fast</strong> interface over WebFlow’s API. It simplifies the process of integrating your Python applications with the WebFlow content management system (CMS), allowing you to create, read, update, and delete items within your WebFlow collections.</p>
+<blockquote>
+<div><p>Check out an example website built with the help of <code class="docutils literal notranslate"><span class="pre">fast-webflow</span></code>: <a class="reference external" href="https://www.liguriasegreta.com"><strong>liguriasegreta.com</strong></a></p>
+</div></blockquote>
+<p><strong>DISCLAIMER</strong>  : This is an <strong>unofficial</strong> abstraction over WebFlow’s API and I am not associated with the WebFlow team.</p>
+<section id="roadmap">
+<h2>Roadmap<a class="headerlink" href="#roadmap" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>[ ] Add <em>e-commerce</em> functionality</p></li>
+<li><p>[ ] Add <em>membership</em> functionality</p></li>
+<li><p>[ ] Add tests</p></li>
+<li><p>[x] Finish documentation</p></li>
+<li><p>[x] Publish to PyPi</p></li>
+</ul>
+</section>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Authenticate</strong> with the WebFlow API using your API key</p></li>
+<li><p><strong>Fetch</strong>, <strong>Create</strong>, <strong>Update</strong>, and <strong>Delete</strong> Items and files from WebFlow Collections</p></li>
+<li><p>Handle <strong>pagination</strong> for large Collections</p></li>
+<li><p>Hidden parallelization for <strong>faster operations</strong> (with implicit error handling)</p></li>
+</ul>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<p>You can install the package using pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>fast-webflow
+</pre></div>
+</div>
+</section>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Obtain an API key from WebFlow by following their <a class="reference external" href="https://developers.webflow.com/docs/access-token">API Access Token</a>.</p></li>
+<li><p>Import the <code class="docutils literal notranslate"><span class="pre">cms</span></code> module from the <code class="docutils literal notranslate"><span class="pre">fast-webflow</span></code> package automatically to interact with the WebFlow CMS API; then authenticate:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">webflow.cms</span> <span class="k">as</span> <span class="nn">cms</span>
+<span class="n">api_key</span> <span class="o">=</span> <span class="s1">&#39;YOUR_API_KEY&#39;</span>
+<span class="n">cms</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">api_key</span><span class="p">)</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Start interacting with the WebFlow API using the provided methods. For example, to fetch all items from a collection:</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">webflow.cms</span> <span class="kn">import</span> <span class="n">Collection</span>
+
+<span class="n">collection_id</span> <span class="o">=</span> <span class="s1">&#39;COLLECTION_ID&#39;</span>
+<span class="n">collection</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="n">collection_id</span><span class="p">)</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">get_all_items</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;slug&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<p>If you are quickly searching for a particular code snippet, I hope you can find it here. These all
+assume that you <em>are already authenticated</em> (if not, see <a class="reference internal" href="#getting-started">the quickstart</a>).</p>
+<section id="create-cms-elements">
+<h3>Create CMS Elements<a class="headerlink" href="#create-cms-elements" title="Permalink to this heading"></a></h3>
+<p>Elements from the CMS are handled via classes, with relevant methods for each. Classes also behave like dictionaries, holding by default some basic information (fetched from the CMS at creation time).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">webflow.cms</span> <span class="kn">import</span> <span class="n">Site</span><span class="p">,</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Item</span>
+
+<span class="c1"># connect to the Sites part of the API</span>
+<span class="n">site_id</span> <span class="o">=</span> <span class="s1">&#39;YOUR_SITE_ID&#39;</span>
+<span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">site_id</span><span class="p">)</span>
+
+<span class="c1"># connect to the Collections part of the API</span>
+<span class="n">collection_id</span> <span class="o">=</span> <span class="s1">&#39;YOUR_COLLECTION_ID&#39;</span>
+<span class="n">collection</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="n">collection_id</span><span class="p">)</span>
+
+<span class="c1"># connect to the Items part of the API</span>
+<span class="n">item_id</span> <span class="o">=</span> <span class="s1">&#39;YOUR_ITEM_ID&#39;</span>
+<span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="fetch-data">
+<h3>Fetch Data<a class="headerlink" href="#fetch-data" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">webflow.cms</span> <span class="kn">import</span> <span class="n">Site</span><span class="p">,</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Item</span>
+
+<span class="c1"># get list of available sites</span>
+<span class="n">sites</span> <span class="o">=</span> <span class="n">cms</span><span class="o">.</span><span class="n">list_sites</span><span class="p">()</span>
+<span class="n">site_id</span> <span class="o">=</span> <span class="n">sites</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span>
+
+<span class="c1"># connect to that site&#39;s CMS and get some data</span>
+<span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">site_id</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">site_id</span> <span class="o">==</span> <span class="n">site</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">site</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span>
+
+<span class="n">collections</span>   <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">get_collections</span><span class="p">()</span>
+<span class="n">domains</span>       <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">get_domains</span><span class="p">()</span>
+<span class="n">site_details</span>  <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="n">site_name</span>     <span class="o">=</span> <span class="n">site</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># connect to a collection in the CMS and get some data</span>
+<span class="n">collection_id</span> <span class="o">=</span> <span class="s1">&#39;YOUR_CONNECTION_ID&#39;</span>
+<span class="n">collection</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="n">collection_id</span><span class="p">)</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">get_all_items</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># connect to an item in the CMS and get some data</span>
+<span class="n">item_id</span> <span class="o">=</span> <span class="s1">&#39;YOUR_ITEM_ID&#39;</span>
+<span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span>
+<span class="n">item_data</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="publish-website">
+<h3>Publish Website<a class="headerlink" href="#publish-website" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">webflow.cms</span> <span class="kn">import</span> <span class="n">Site</span>
+
+<span class="c1"># connect to that site&#39;s CMS and publish it</span>
+<span class="n">site_id</span> <span class="o">=</span> <span class="s1">&#39;YOUR_SITE_ID&#39;</span>
+<span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">site_id</span><span class="p">)</span>
+<span class="n">site</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
+
+<span class="c1"># you may specify custom domains too</span>
+<span class="n">site</span><span class="o">.</span><span class="n">publish</span><span class="p">([</span><span class="s1">&#39;www.first.domain.com&#39;</span><span class="p">,</span> <span class="s1">&#39;www.second.domain.com&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="upload-data">
+<h3>Upload Data<a class="headerlink" href="#upload-data" title="Permalink to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">webflow.cms</span> <span class="kn">import</span> <span class="n">Site</span><span class="p">,</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Item</span>
+
+<span class="n">new_items</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;first item,</span>
+    <span class="s1">&#39;slug&#39;</span><span class="p">:</span> <span class="s1">&#39;item1</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;second item,</span>
+    <span class="s1">&#39;slug&#39;</span><span class="p">:</span> <span class="s1">&#39;item2</span>
+  <span class="p">},</span>
+<span class="p">]</span>
+<span class="n">added_items</span> <span class="o">=</span> <span class="n">collection</span><span class="o">.</span><span class="n">post_items</span><span class="p">(</span><span class="n">new_items</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading"></a></h2>
+<p>Contributions to the fast-WebFlow Python Client library are welcome! If you encounter any bugs, have suggestions, or would like to contribute new features, please feel free to open an issue or submit a pull request on GitHub. You can also contact me directly!</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/tcilloni/fast-webflow/issues/new">Open a new issue</a></p></li>
+<li><p><a class="reference external" href="https://github.com/tcilloni/fast-webflow/pulls">Pull Requests</a></p></li>
+<li><p><a class="reference external" href="mailto:tcilloni&#37;&#52;&#48;outlook&#46;com">Email me</a></p></li>
+</ul>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this heading"></a></h2>
+<p>This project is licensed under the GNU GPLv3 License. See the <a class="reference download internal" download="" href="_downloads/9879d6db96fd29134fc802214163b95a/LICENSE"><span class="xref download myst">LICENSE</span></a> file for more information.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="webflow.cms.html" class="btn btn-neutral float-left" title="webflow.cms package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Thomas Cilloni.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
